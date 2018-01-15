@@ -259,6 +259,55 @@ rb_coverage_running(VALUE klass)
     return RTEST(coverages) ? Qtrue : Qfalse;
 }
 
+/*
+ *  call-seq:
+ *     Coverage.pause  => nil
+ *
+ * Disabled the event listeners for coverage, but leaves all current data intact
+ */
+static VALUE
+rb_coverage_pause(VALUE klass)
+{
+  //printf( "hello from coverage pause\n" );
+    rb_pause_coverages();
+    return Qnil;
+}
+
+/*
+ *  call-seq:
+ *     Coverage.reset  => nil
+ *
+ * leave data structure but reset all counts to 0
+ */
+static VALUE
+rb_coverage_reset(VALUE klass)
+{
+  //printf( "hello from coverage reset\n" );
+    rb_reset_to_zero_coverages();
+    return Qnil;
+}
+
+/*
+ *  call-seq:
+ *     Coverage.resume  => nil
+ *
+ * Reenable and resume the event listeners for coverage
+ */
+static VALUE
+rb_coverage_resume(VALUE klass)
+{
+    VALUE coverages;
+
+    coverages = rb_get_coverages();
+    if (!RTEST(coverages)) {
+        rb_raise(rb_eRuntimeError, "cannot resume measuring coverage that isn't currently running");
+    }
+    else {
+        rb_set_coverages(coverages, current_mode, me2counter);
+    }
+    return Qnil;
+}
+
 /* Coverage provides coverage measurement feature for Ruby.
  * This feature is experimental, so these APIs may be changed in future.
  *
@@ -300,5 +349,8 @@ Init_coverage(void)
     rb_define_module_function(rb_mCoverage, "result", rb_coverage_result, 0);
     rb_define_module_function(rb_mCoverage, "peek_result", rb_coverage_peek_result, 0);
     rb_define_module_function(rb_mCoverage, "running?", rb_coverage_running, 0);
+    rb_define_module_function(rb_mCoverage, "pause", rb_coverage_pause, -1);
+    rb_define_module_function(rb_mCoverage, "reset", rb_coverage_reset, -1);
+    rb_define_module_function(rb_mCoverage, "resume", rb_coverage_resume, -1);
     rb_global_variable(&me2counter);
 }

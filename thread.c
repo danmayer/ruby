@@ -2,7 +2,7 @@
 
   thread.c -
 
-  $Author$
+  $Author: normal $
 
   Copyright (C) 2004-2007 Koichi Sasada
 
@@ -5179,6 +5179,26 @@ reset_coverage_i(st_data_t key, st_data_t val, st_data_t dummy)
     if (lines) rb_ary_clear(lines);
     if (branches) rb_ary_clear(branches);
     return ST_CONTINUE;
+}
+
+void
+rb_pause_coverages(void)
+{
+    rb_remove_event_hook((rb_event_hook_func_t) update_line_coverage);
+    if (GET_VM()->coverage_mode & COVERAGE_TARGET_BRANCHES) {
+	rb_remove_event_hook((rb_event_hook_func_t) update_branch_coverage);
+    }
+    if (GET_VM()->coverage_mode & COVERAGE_TARGET_METHODS) {
+	rb_remove_event_hook((rb_event_hook_func_t) update_method_coverage);
+    }
+}
+
+void
+rb_reset_to_zero_coverages(void)
+{
+    printf( "hello from reset to zero coverages\n" );
+    VALUE coverages = rb_get_coverages();
+    st_foreach(rb_hash_tbl_raw(coverages), clear_coverage_i, 0);
 }
 
 void

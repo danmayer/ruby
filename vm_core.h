@@ -2,7 +2,7 @@
 
   vm_core.h -
 
-  $Author$
+  $Author: mame $
   created at: 04/01/01 19:41:38 JST
 
   Copyright (C) 2004-2007 Koichi Sasada
@@ -1781,6 +1781,8 @@ int rb_thread_check_trap_pending(void);
 extern VALUE rb_get_coverages(void);
 extern void rb_set_coverages(VALUE, int, VALUE);
 extern void rb_reset_coverages(void);
+extern void rb_pause_coverages(void);
+extern void rb_reset_to_zero_coverages(void);
 
 void rb_postponed_job_flush(rb_vm_t *vm);
 
