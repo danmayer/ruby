@@ -255,6 +255,7 @@ rb_coverage_result(VALUE klass)
 static VALUE
 rb_coverage_running(VALUE klass)
 {
+    printf( "hello from Coverage.running\n" );
     VALUE coverages = rb_get_coverages();
     return RTEST(coverages) ? Qtrue : Qfalse;
 }
@@ -268,7 +269,7 @@ rb_coverage_running(VALUE klass)
 static VALUE
 rb_coverage_pause(VALUE klass)
 {
-  //printf( "hello from coverage pause\n" );
+    printf( "hello from coverage pause\n" );
     rb_pause_coverages();
     return Qnil;
 }
