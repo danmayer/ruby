@@ -301,9 +301,11 @@ rb_coverage_resume(VALUE klass)
 
     coverages = rb_get_coverages();
     if (!RTEST(coverages)) {
+        printf( "it is already running\n" );
         rb_raise(rb_eRuntimeError, "cannot resume measuring coverage that isn't currently running");
     }
     else {
+        printf( "set coverages\n" );
         rb_set_coverages(coverages, current_mode, me2counter);
     }
     return Qnil;
